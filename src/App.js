@@ -8,7 +8,7 @@ import Register from './pages/Register'
 const App = () => {
   return (
     <Router>
-      <div>
+      <div className="bg-gray-550 min-h-screen">
         <Header />
 
         <Routes>
