@@ -12,7 +12,7 @@ const EventCard = () => {
         <div className="mb-2">
           <p>Tagline</p>
           <p className="text-xs">From 25th April 2022 15:30</p>
-          <p className="text-xs">From 26th April 2022 15:30</p>
+          <p className="text-xs">To 26th April 2022 15:30</p>
         </div>
         <button className="bg-purple-550 rounded-xl text-white font-medium px-4 py-1">Register Now</button>
         <div className="my-2">

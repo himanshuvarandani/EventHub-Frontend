@@ -25,7 +25,7 @@ const Header = () => {
         </div>
       </nav>
       <div className="flex justify-between items-center bg-gray-650 text-white h-12 px-24">
-        <select className="bg-gray-650">
+        <select className="font-medium bg-gray-650">
           <option>All Categories</option>
           <option>Convention</option>
           <option>Standup Comedy</option>
@@ -37,7 +37,7 @@ const Header = () => {
           <option>Music Festival</option>
           <option>Corporate Events</option>
         </select>
-        <select className="bg-gray-650">
+        <select className="font-medium bg-gray-650">
           <option>Select City</option>
           <option>Bangalore</option>
           <option>City 1</option>
@@ -46,8 +46,8 @@ const Header = () => {
           <option>City 4</option>
           <option>City 5</option>
         </select>
-        <button className="bg-purple-550 rounded-xl px-4 py-1">Publish Event</button>
-        <p>Offers</p>
+        <button className="bg-purple-550 font-medium rounded-xl px-4 py-1">Publish Event</button>
+        <p className="font-medium">Offers</p>
       </div>
     </div>
   )

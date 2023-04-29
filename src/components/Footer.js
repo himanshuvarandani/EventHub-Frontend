@@ -34,7 +34,7 @@ const Footer = () => {
       </div>
       <div className="flex justify-center items-center text-lg font-medium">
         <p>Looking for a partnership with us? Today is the great day! Let&apos;s connect!</p>
-        <button className="bg-purple-550 rounded-xl px-4 py-1 ml-5">Contact Us</button>
+        <button className="bg-purple-550 text-white rounded-xl px-4 py-1 ml-5">Contact Us</button>
       </div>
     </div>
   )
