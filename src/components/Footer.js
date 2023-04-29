@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const Footer = () => {
   return (
-    <div className="w-full bg-gray-650 absolute bottom-0 py-10 px-20">
+    <div className="w-full bg-gray-650 py-10 px-20">
       <div className="relative h-5 w-full flex justify-center border-b-2 border-dotted border-black leading-1 mb-5">
         <img src="/logo.png" className="absolute top-0 bg-gray-650 px-5" />
       </div>
