@@ -12,7 +12,7 @@ const Header = () => {
     <nav className="sm:sticky top-0 z-50 w-full bg-white">
       <div className="w-full flex justify-between items-center px-40 py-5">
         <div className="flex items-center">
-          <img src="/logo.png" />
+          <a href="/"><img src="/logo.png" /></a>
           <div className="relative">
             <FontAwesomeIcon
               icon={faSearch}
