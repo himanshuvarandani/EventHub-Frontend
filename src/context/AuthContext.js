@@ -1,4 +1,5 @@
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
+import { getUserDetailsByToken } from '../api/user'
 
 const initialUser = {
   id: 0,
@@ -26,6 +27,28 @@ export const AuthProvider = ({ children }) => {
     selectedCategory,
     setSelectedCategory
   }
+
+  useEffect(() => {
+    const token = localStorage.getItem("token")
+
+    if (token) {
+      getUserDetailsByToken()
+        .then(({ data }) => {
+          setUser({
+            id: data.id,
+            name: data.name,
+            email: data.email,
+            contact: data.contact,
+            city: data.city,
+          })
+        })
+        .catch((err) => {
+          console.log(JSON.stringify(err))
+          localStorage.setItem("token", null)
+          setUser(initialUser)
+        })
+    }
+  }, [])
 
   return (
     <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>

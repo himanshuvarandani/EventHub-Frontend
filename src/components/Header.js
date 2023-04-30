@@ -26,7 +26,7 @@ const Header = () => {
         <div className="flex items-center text-lg text-gray-650 font-medium">
           <p className="mr-5">About</p>
           {!user.id ? (
-            <p>Login</p>
+            <a href="/login">Login</a>
           ) : (
             <select
               className="bg-white w-28 hover:cursor-pointer"

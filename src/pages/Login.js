@@ -17,11 +17,11 @@ const Login = () => {
         .then(({ data }) => {
           localStorage.setItem("token", data.token)
           setUser({
-            id: 0,
-            name: "",
-            email: "",
-            contact: "",
-            city: "",
+            id: data.user.id,
+            name: data.user.name,
+            email: data.user.email,
+            contact: data.user.contact,
+            city: data.user.city,
           })
           navigate("/")
         })
