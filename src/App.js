@@ -12,7 +12,7 @@ const App = () => {
         <div className="bg-gray-550 min-h-screen">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/event" element={<Event />} />
+            <Route path="/event/:eventId" element={<Event />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
           </Routes>

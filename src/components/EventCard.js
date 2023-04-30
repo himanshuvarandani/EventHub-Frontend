@@ -17,7 +17,7 @@ const EventCard = ({ event }) => {
           <p className="text-xs">From {event.start}</p>
           <p className="text-xs">To {event.end}</p>
         </div>
-        <button className="bg-purple-550 rounded-xl text-white font-medium px-4 py-1">Register Now</button>
+        <button className="bg-purple-550 rounded-xl text-white font-medium px-4 py-1">Book Now</button>
         <div className="my-2">
           <p className="text-xs">{event.location}</p>
           <p>{event.city}</p>

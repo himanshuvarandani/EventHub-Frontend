@@ -1,7 +1,7 @@
 import { createContext, useState } from 'react'
 
 const initialUser = {
-  id: 1,
+  id: 0,
   name: "",
   email: "",
   contact: "",
