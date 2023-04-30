@@ -17,7 +17,7 @@ export const AuthContext = createContext({
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(initialUser)
-  const [selectedCity, setSelectedCity] = useState("Mumbai")
+  const [selectedCity, setSelectedCity] = useState("Bangalore")
   const [selectedCategory, setSelectedCategory] = useState(0)
   const auth = {
     user,

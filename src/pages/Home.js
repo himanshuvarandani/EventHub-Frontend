@@ -67,7 +67,7 @@ const Home = () => {
         <div className="mx-20">
           <div className="my-10">
             <h1 className="text-2xl font-bold">
-              New Events in {selectedCity} {!selectedCategory ? null : `for ${selectedCategory}`}
+              New Events in {selectedCity}
             </h1>
             <div className="flex flex-row overflow-x-auto m-5">
               {!events.length
