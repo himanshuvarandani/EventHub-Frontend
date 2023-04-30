@@ -11,3 +11,29 @@ export const fetchEvents = async (city, categoryId=0, page=1, limit=10) => {
 export const fetchEventById = async (eventId) => {
   return api.get(`/event/eventDetail/${eventId}`)
 }
+
+export const createEvent = async (
+  name,
+  description,
+  start,
+  end,
+  capacity,
+  category,
+  price,
+  address,
+  city,
+  owners,
+) => {
+  return api.post("/event/create", {
+    name,
+    description,
+    start,
+    end,
+    capacity,
+    category,
+    price,
+    address,
+    city,
+    owners,
+  })
+}
