@@ -35,6 +35,7 @@ const CreateEvent = () => {
   }, [])
 
   const publish = () => {
+    setError("")
     if (
       name &&
       description &&
@@ -66,8 +67,17 @@ const CreateEvent = () => {
   }
 
   const findOwnerDetails = () => {
+    setError("")
     if (!newOwnerEmail) {
       setError("Owner Email Required to find owner account")
+      return
+    }
+    let ownerAdded = false
+    owners.map(owner => {
+      if (newOwnerEmail === owner.email) ownerAdded = true
+    })
+    if (ownerAdded) {
+      setError("Owner already added!")
       return
     }
     getUserDetailsByEmail(newOwnerEmail)
@@ -79,6 +89,7 @@ const CreateEvent = () => {
         setOwners(prev => [
           ...prev, data
         ])
+        setNewOwnerEmail("")
       })
       .catch(err => setError("Error while fetching user details"))
   }
@@ -188,7 +199,7 @@ const CreateEvent = () => {
                       className="bg-purple-550 text-white text-lg font-medium rounded-xl px-8 py-2"
                       onClick={findOwnerDetails}
                     >
-                      Find Owner Details
+                      Add Co-owner
                     </button>
                   </div>
                 </div>
@@ -203,6 +214,11 @@ const CreateEvent = () => {
               />
               <p className="text-lg">I've read all the Terms &amp; Conditions of EventHUB, and agreed to the same!</p>
             </div>
+            {!error ? null : (
+              <p className="text-red-500 text-center font-medium m-3">
+                {error}
+              </p>
+            )}
             <div className="flex justify-center">
               <button
                 className="bg-purple-550 text-white text-lg font-medium rounded-xl px-8 py-2"

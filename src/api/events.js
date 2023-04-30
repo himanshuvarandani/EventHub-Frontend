@@ -27,13 +27,14 @@ export const createEvent = async (
   return api.post("/event/create", {
     name,
     description,
-    start,
-    end,
-    capacity,
-    category,
+    startDate: start,
+    endDate: end,
+    maxparticipants: capacity,
+    categoryId: category,
     price,
-    address,
+    location: address,
     city,
     owners,
+    userToken: localStorage.getItem("token")
   })
 }
