@@ -89,8 +89,8 @@ const Event = () => {
           <div className="mx-2 my-10">
             <h3 className="text-2xl font-bold">Similar Events</h3>
             <div className="flex flex-row m-5">
-              <EventCard />
-              <EventCard />
+              {/* <EventCard />
+              <EventCard /> */}
             </div>
           </div>
         </div>

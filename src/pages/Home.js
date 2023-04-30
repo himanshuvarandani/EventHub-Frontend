@@ -1,13 +1,23 @@
-import { useRef } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import ReactElasticCarousel from "react-elastic-carousel"
+import { fetchEvents } from "../api/events"
 import EventCard from "../components/EventCard"
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import SubHeader from "../components/SubHeader"
+import { AuthContext } from "../context/AuthContext"
 
 const Home = () => {
+  const [events, setEvents] = useState([])
+  const { selectedCity, selectedCategory} = useContext(AuthContext)
   const carouselRef = useRef(null)
   let resetTimeout
+
+  useEffect(() => {
+    fetchEvents(selectedCity, selectedCategory)
+      .then(({ data }) => setEvents(data))
+      .catch(() => alert("Not able to fetch events, please Try Again!"))
+  }, [selectedCity, selectedCategory])
 
   return (
     <div>
@@ -36,12 +46,16 @@ const Home = () => {
             <img src="/Image1.png" />
           </div>
         </ReactElasticCarousel>
-        <div className="mx-40 my-10">
+        <div className="mx-20 my-10">
           <div>
             <h1 className="text-2xl font-bold">New Events</h1>
-            <div className="flex flex-row m-5">
-              <EventCard />
-              <EventCard />
+            <div className="flex flex-row overflow-x-auto m-5">
+              {!events.length
+                ? <p>No Events Available</p>
+                : events.map(event => (
+                    <EventCard event={event} />
+                  ))
+              }
             </div>
           </div>
         </div>

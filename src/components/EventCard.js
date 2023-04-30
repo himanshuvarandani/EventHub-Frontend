@@ -1,6 +1,9 @@
-const EventCard = () => {
+const EventCard = ({ event }) => {
   return (
-    <div className="bg-white rounded-xl mx-5 h-[380px] w-[280px]">
+    <a
+      href={`/event/${event.id}`}
+      className="bg-white rounded-xl m-5 h-[380px] w-[280px]"
+    >
       <div className="flex justify-center w-full h-1/2 overflow-hidden rounded-t-xl">
         <img
           src="/Image2.png"
@@ -8,19 +11,19 @@ const EventCard = () => {
         />
       </div>
       <div className="text-center my-2">
-        <h2 className="text-xl font-bold">Event Name</h2>
+        <h2 className="text-xl font-bold">{event.eventname}</h2>
         <div className="mb-2">
-          <p>Tagline</p>
-          <p className="text-xs">From 25th April 2022 15:30</p>
-          <p className="text-xs">To 26th April 2022 15:30</p>
+          <p>{event.tagline}</p>
+          <p className="text-xs">From {event.start}</p>
+          <p className="text-xs">To {event.end}</p>
         </div>
         <button className="bg-purple-550 rounded-xl text-white font-medium px-4 py-1">Register Now</button>
         <div className="my-2">
-          <p className="text-xs">Address</p>
-          <p>City</p>
+          <p className="text-xs">{event.location}</p>
+          <p>{event.city}</p>
         </div>
       </div>
-    </div>
+    </a>
   )
 }
 
