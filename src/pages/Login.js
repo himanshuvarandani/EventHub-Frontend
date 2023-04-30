@@ -1,4 +1,34 @@
+import { useContext, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { login } from "../api/auth"
+import { AuthContext } from "../context/AuthContext"
+
 const Login = () => {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+  const { setUser } = useContext(AuthContext)
+  const navigate = useNavigate()
+
+  const proceed = () => {
+    setError("")
+    if (email && password) {
+      login(email, password)
+        .then(({ data }) => {
+          localStorage.setItem("token", data.token)
+          setUser({
+            id: 0,
+            name: "",
+            email: "",
+            contact: "",
+            city: "",
+          })
+          navigate("/")
+        })
+        .catch((err) => console.log(JSON.stringify(err)))
+    } else setError("All fields are required.")
+  }
+
   return (
     <div className="h-screen w-full bg-purple-550 py-20 px-40">
       <div className="flex justify-between h-full">
@@ -30,19 +60,31 @@ const Login = () => {
           <div className="flex flex-col items-center mx-10">
             <input
               type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter Your Email"
               className="bg-gray-650 text-xl text-white placeholder-white rounded-xl w-11/12 p-4 m-3"
             />
             <input
               type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               className="bg-gray-650 text-xl text-white placeholder-white rounded-xl w-11/12 p-4 m-3"
             />
             <a href="/reset" className="underline text-blue-500 text-right text-lg w-11/12 m-1">
               Reset Password
             </a>
+            {!error ? null : (
+              <p className="text-red-500 text-center font-medium m-3">
+                {error}
+              </p>
+            )}
             <div className="flex justify-center">
-              <button className="bg-purple-550 text-white text-xl font-medium rounded-xl px-8 py-2 m-3">
+              <button
+                className="bg-purple-550 text-white text-xl font-medium rounded-xl px-8 py-2 m-3"
+                onClick={proceed}
+              >
                 Login
               </button>
             </div>

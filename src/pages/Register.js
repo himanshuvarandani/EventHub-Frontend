@@ -1,4 +1,36 @@
+import { useState } from "react"
+import { redirect } from "react-router-dom"
+import { register } from "../api/auth"
+
 const Register = () => {
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [contact, setContact] = useState()
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [address, setAddress] = useState("")
+  const [city, setCity] = useState("")
+  const [error, setError] = useState("")
+
+  const proceed = () => {
+    setError("")
+    if (
+      name &&
+      email &&
+      contact &&
+      password &&
+      confirmPassword &&
+      address &&
+      city
+    ) {
+      if (password === confirmPassword) {
+        register(name, email, contact, password, address, city)
+          .then(() => redirect("/login"))
+          .catch((err) => setError(err.main))
+      } else setError("Password and Confirm Password should be same.")
+    } else setError("All fields are required.")
+  }
+
   return (
     <div className="h-screen w-full bg-purple-550 py-20 px-40">
       <div className="flex justify-between h-full">
@@ -30,41 +62,63 @@ const Register = () => {
           <div className="flex flex-col items-center overflow-y-auto no-scrollbar h-4/5 my-5 px-10">
             <input
               type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               placeholder="Name"
               className="bg-gray-650 text-xl text-white placeholder-white rounded-xl w-11/12 p-4 m-3"
             />
             <input
               type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
               className="bg-gray-650 text-xl text-white placeholder-white rounded-xl w-11/12 p-4 m-3"
             />
             <input
-              type="text"
+              type="number"
+              value={contact}
+              onChange={(e) => setContact(Number(e.target.value))}
               placeholder="Mobile Number"
               className="bg-gray-650 text-xl text-white placeholder-white rounded-xl w-11/12 p-4 m-3"
             />
             <input
               type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               className="bg-gray-650 text-xl text-white placeholder-white rounded-xl w-11/12 p-4 m-3"
             />
             <input
               type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirm Password"
               className="bg-gray-650 text-xl text-white placeholder-white rounded-xl w-11/12 p-4 m-3"
             />
             <input
               type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
               placeholder="Address"
               className="bg-gray-650 text-xl text-white placeholder-white rounded-xl w-11/12 p-4 m-3"
             />
             <input
               type="text"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
               placeholder="City"
               className="bg-gray-650 text-xl text-white placeholder-white rounded-xl w-11/12 p-4 m-3"
             />
+            {!error ? null : (
+              <p className="text-red-500 text-center font-medium m-3">
+                {error}
+              </p>
+            )}
             <div className="flex justify-center">
-              <button className="bg-purple-550 text-white text-xl font-medium rounded-xl px-8 py-2 m-3">
+              <button
+                className="bg-purple-550 text-white text-xl font-medium rounded-xl px-8 py-2 m-3"
+                onClick={proceed}
+              >
                 Join
               </button>
             </div>

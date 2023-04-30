@@ -1,21 +1,34 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useState } from 'react'
 
 const initialUser = {
   id: 0,
   name: "",
   email: "",
   contact: "",
+  city: "",
 }
 
-const authContext = createContext()
+export const AuthContext = createContext({
+  user: initialUser,
+  selectedCity: "",
+  selectedCategory: "",
+})
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(initialUser)
-  const auth = { user, setUser }
+  const [selectedCity, setSelectedCity] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState("")
+  const auth = {
+    user,
+    setUser,
+    selectedCity,
+    setSelectedCity,
+    selectedCategory,
+    setSelectedCategory
+  }
 
   return (
-    <authContext.Provider value={auth}>{children}</authContext.Provider>
+    <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>
   )
 }
 
-export const useAuth = useContext(authContext)
