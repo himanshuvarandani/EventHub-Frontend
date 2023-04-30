@@ -34,7 +34,7 @@ const Login = () => {
               className="bg-gray-650 text-xl text-white placeholder-white rounded-xl w-11/12 p-4 m-3"
             />
             <input
-              type="text"
+              type="password"
               placeholder="Password"
               className="bg-gray-650 text-xl text-white placeholder-white rounded-xl w-11/12 p-4 m-3"
             />
