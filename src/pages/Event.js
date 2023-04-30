@@ -1,22 +1,31 @@
 import { useEffect, useRef, useState } from "react"
 import ReactElasticCarousel from "react-elastic-carousel"
+import { useParams } from "react-router-dom"
+import { fetchEventById, fetchEvents } from "../api/events"
 import EventCard from "../components/EventCard"
 import Footer from '../components/Footer'
 import Header from '../components/Header'
-import SubHeader from "../components/SubHeader"
-import { fetchEventById } from "../api/events"
-import { useParams } from "react-router-dom"
 import Modal from "../components/Modal"
+import SubHeader from "../components/SubHeader"
 
 const Event = () => {
   const [event, setEvent] = useState({})
+  const [owners, setOwners] = useState([])
+  const [similarEvents, setSimilarEvents] = useState([])
   const { eventId } = useParams()
   const carouselRef = useRef(null)
   let resetTimeout
-
+  
   useEffect(() => {
     fetchEventById(eventId)
-      .then(({ data }) => console.log(data))
+      .then(({ data }) => {
+        setEvent(data.event_detail[0])
+        setOwners(data.owner_detail)
+
+        fetchEvents(data.city, data.category)
+          .then(({ data }) => setSimilarEvents(data))
+          .catch(() => alert("Not able to fetch events, please Try Again!"))
+      })
       .catch((err) => console.log(err))
   }, [])
 
@@ -26,8 +35,8 @@ const Event = () => {
       <SubHeader />
       <div className="mx-20 my-10">
         <div className="text-center">
-          <h1 className="text-4xl mb-2">Event Name</h1>
-          <p className="text-xl">Tagline</p>
+          <h1 className="text-4xl mb-2">{event.eventname}</h1>
+          <p className="text-xl">{event.tagline}</p>
         </div>
         <hr className="my-8 border-y-2 border-solid border-gray-650" />
         <div className="mx-10">
@@ -55,53 +64,72 @@ const Event = () => {
           </ReactElasticCarousel>
           <div className="flex justify-between items-stretch mx-2 my-10">
             <div className="bg-white rounded-2xl w-3/4 mr-10 py-5 px-10">
-              <div className="flex justify-between items-center mb-5">
-                <h3 className="text-2xl font-bold">Description</h3>
-                <Modal />
+              <div className="mb-20">
+                <div className="flex justify-between items-center mb-5">
+                  <h3 className="text-2xl font-bold">Description</h3>
+                  <div className="flex items-center">
+                    <p className="mr-5">Tickets Left: <span className="text-red-500">{event.maxparticipants-event.ticket_sold}</span></p>
+                    <Modal event_id={event.id} event_price={event.price} />
+                  </div>
+                </div>
+                <p>{event.description}</p>
               </div>
-              <p>Event Description Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+              <div className="flex justify-between my-5 mr-10">
+                <h4 className="text-xl font-bold">Price For Each Ticket</h4>
+                <p>Rs. {event.price}</p>
+              </div>
+              <div className="flex justify-between my-5 mr-10">
+                <h4 className="text-xl font-bold">Total Tickets</h4>
+                <p>{event.maxparticipants}</p>
+              </div>
             </div>
             <div className="w-1/4">
               <div className="bg-white rounded-2xl px-5 py-2 mb-5">
                 <h4 className="text-xl font-medium text-center">Event Time</h4>
                 <h5 className="font-medium">From</h5>
-                <p className="ml-4">25th April 2022 15:30</p>
+                <p className="ml-4">
+                  {!event.start ? null : (
+                    <p>{new Date(event.start).toDateString()} {new Date(event.start).toTimeString().slice(0,5)}</p>
+                  )}
+                </p>
                 <h5 className="font-medium">To</h5>
-                <p className="ml-4">26th April 2022 15:30</p>
+                <p className="ml-4">
+                  {!event.start ? null : (
+                    <p>{new Date(event.end).toDateString()} {new Date(event.end).toTimeString().slice(0,5)}</p>
+                  )}
+                </p>
               </div>
               <div className="bg-white rounded-2xl text-center px-5 py-2 mb-5">
                 <h4 className="text-xl font-medium">Location</h4>
-                <p>Address Lorem Ipsum is simply dummy</p>
-                <p className="text-lg">City</p>
+                <p>{event.location}</p>
+                <p className="text-lg">{event.city}</p>
               </div>
               <div className="bg-white rounded-2xl px-5 py-2">
                 <h4 className="text-xl font-medium text-center">Contact Organisers</h4>
                 <ul className="list-disc ml-5">
-                  <li className="my-2">
-                    <div>
-                      <p>Name</p>
-                      <p>Email</p>
-                      <p>Contact Number</p>
-                    </div>
-                  </li>
-                  <li className="my-2">
-                    <div>
-                      <p>Name</p>
-                      <p>Email</p>
-                      <p>Contact Number</p>
-                    </div>
-                  </li>
+                  {owners.map(owner => (
+                    <li className="my-2">
+                      <div>
+                        <p>{owner.name}</p>
+                        <p>{owner.email}</p>
+                        <p>{owner.contact}</p>
+                      </div>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
           </div>
-          <div className="mx-2 my-10">
-            <h3 className="text-2xl font-bold">Similar Events</h3>
-            <div className="flex flex-row m-5">
-              {/* <EventCard />
-              <EventCard /> */}
+          {!similarEvents.length ? null : (
+            <div className="mx-2 my-10">
+              <h3 className="text-2xl font-bold">Similar Events</h3>
+              <div className="flex flex-row overflow-x-auto m-5">
+                {similarEvents.map(event => (
+                  <EventCard event={event} />
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
       <Footer />

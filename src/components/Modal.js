@@ -1,44 +1,41 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from "react"
 import { useContext } from "react"
 import { AuthContext } from "../context/AuthContext"
-import axios from "axios";
+import { payOrder, payment } from "../api/payment"
 
-export default function Modal({event_id, event_price}) {
-  const [showModal, setShowModal] = React.useState(false);
-  const [ticket_count, setTicketCount] = React.useState(0);
-  const { user, setUser } = useContext(AuthContext)
+export default function Modal({ event_id, event_price }) {
+  const [showModal, setShowModal] = React.useState(false)
+  const [ticket_count, setTicketCount] = React.useState(0)
+  const { user } = useContext(AuthContext)
 
   const increment = () => {
-    setTicketCount(ticket_count +1);
-  };
+    setTicketCount(ticket_count +1)
+  }
   const decrement = () => {
     if (ticket_count <=0){
-      setTicketCount(0);
-      return;
+      setTicketCount(0)
+      return
     }
-    setTicketCount(ticket_count -1);
-  };
+    setTicketCount(ticket_count -1)
+  }
 
   useEffect(() => {
-    const script = document.createElement("script");
+    const script = document.createElement("script")
 
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.async = true;
+    script.src = "https://checkout.razorpay.com/v1/checkout.js"
+    script.async = true
 
-    document.body.appendChild(script);
-  }, []);
+    document.body.appendChild(script)
+  }, [])
 
-  function openPayModal(amt){
-    console.log(amt);
-    var amount = amt * 100; //Razorpay consider the amount in paise
-    console.log(process.env.REACT_APP_RAZORPAY_ID);
+  function openPayModal(amount){
     var options = {
       "key": process.env.REACT_APP_RAZORPAY_ID,
       "amount": 0, // 2000 paise = INR 20, amount in paisa
       "name": "EventHub",
       'order_id': "something",
       "handler": function (response) {
-        console.log(response);
+        console.log(response)
         var values = {
           razorpay_signature: response.razorpay_signature,
           razorpay_order_id: response.razorpay_order_id,
@@ -47,32 +44,35 @@ export default function Modal({event_id, event_price}) {
           ticket_count:ticket_count,
           event_id: event_id
         }
-        axios.post('http://localhost:8000/api/pay/payment', values)
-          .then(res => { alert("Success") })
+        payment(values)
+          .then(res => {
+            alert("Success")
+            setShowModal(false)
+          })
           .catch(e => console.log(e))
       },
       "theme": {
         "color": "#528ff0"
       }
-    };
+    }
 
-    axios.post('http://localhost:8000/api/pay/order', { amount: amount, user_id: 10432, event_id: 1001, ticket_count:ticket_count })
+    payOrder(amount, user.id, event_id, ticket_count)
       .then(res => {
-        options.order_id = res.data.id;
-        options.amount = res.data.amount;
-        console.log(options);
-        var rzp1 = new window.Razorpay(options);
-        rzp1.open();
+        options.order_id = res.data.id
+        options.amount = res.data.amount
+        console.log(options)
+        var rzp1 = new window.Razorpay(options)
+        rzp1.open()
       })
-      .catch(e => console.log(e));
-  };
+      .catch(e => console.log(e))
+  }
 
   
 
   return (
     <>
       <button
-        className="bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        className="bg-purple-550 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded-xl shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
         type="button"
         onClick={() => setShowModal(true)}
       >
@@ -123,9 +123,12 @@ export default function Modal({event_id, event_price}) {
                   <button
                     className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
-                    onClick={() => {let count = ticket_count*7; openPayModal(count)}}
+                    onClick={() => {
+                      let amount = ticket_count*event_price
+                      openPayModal(amount)
+                    }}
                   >
-                    Pay Now ${7 * ticket_count}
+                    Pay Now ${event_price * ticket_count}
                   </button>
                 </div>
               </div>
@@ -135,5 +138,5 @@ export default function Modal({event_id, event_price}) {
         </>
       ) : null}
     </>
-  );
+  )
 }
